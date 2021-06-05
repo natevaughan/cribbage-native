@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Button } from "react-native";
+import { Button, StyleSheet, View } from "react-native";
 
 interface ScoreIncrementProps {
     increment: number
@@ -13,12 +13,20 @@ const ScoreIncrement: FC<ScoreIncrementProps> = (props: ScoreIncrementProps) => 
         color = "#0000FF"
     }
     return (
-        <Button
-            title={`+${props.increment}`}
-            onPress={() => {props.handleClick(props.increment) } }
-            color={color}
-        />
+        <View style={styles.margined}>
+            <Button
+                title={`+${props.increment}`}
+                onPress={() => {props.handleClick(props.increment) } }
+                color={color}
+            />
+        </View>
     )
 }
 
 export default ScoreIncrement;
+
+const styles = StyleSheet.create({
+    margined: {
+        margin: 5
+    }
+});

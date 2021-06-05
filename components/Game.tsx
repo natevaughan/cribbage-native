@@ -2,7 +2,7 @@ import React from "react";
 import Pegboard from "./Pegboard";
 import ScoreIncrementGrid from "./ScoreIncrementGrid";
 import Scoreboard from "./Scoreboard";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Button, ScrollView, StyleSheet, Text, View } from "react-native";
 
 class GameState {
     constructor(history: Scores[]) {
@@ -75,12 +75,22 @@ export default class Game extends React.Component {
         let winner = this.winner(last)
         if (winner) {
             message = `${winner} wins!`
-            titleStyles.color = '#FF0000';
+            if (winner === "red") {
+                titleStyles.color = '#FF0000';
+            } else if (winner === "blue") {
+                titleStyles.color = '#0000FF'
+            }
         }
         return (
             <ScrollView contentContainerStyle={[styles.container]}>
                 <Text style={[titleStyles]}>{message}</Text>
+                <Button
+                    title="reset"
+                    onPress={() => {this.setState(new GameState([new Scores()]))} }
+                    color="#999999"
+                />
                 <Scoreboard redScore={last.red} blueScore={last.blue} />
+                <Pegboard redScore={last.red} blueScore={last.blue} previousRedScore={previousTotals.red} previousBlueScore={previousTotals.blue} />
                 <ScoreIncrementGrid
                     incrementRed={(i) => {this.increment("red", i.valueOf())}}
                     incrementBlue={(i) => {this.increment("blue", i.valueOf())}}

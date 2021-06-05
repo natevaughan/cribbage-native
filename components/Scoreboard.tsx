@@ -9,18 +9,22 @@ interface ScoreboardProps {
 const Scoreboard: FC<ScoreboardProps> = (props: ScoreboardProps) => {
     return (
         <View style={[styles.scoreboard]}>
-            <Text style={[styles.neutral]}>
-                Red score:
-            </Text>
-            <Text style={[styles.neutral]}>
-                Blue score:
-            </Text>
-            <Text style={[styles.red]}>
-                {props.redScore}
-            </Text>
-            <Text style={[styles.blue]}>
-                {props.blueScore}
-            </Text>
+            <View style={[styles.textInline]}>
+                <Text style={[styles.neutral]}>
+                    Red score:
+                </Text>
+                <Text style={[styles.red]}>
+                    {props.redScore}
+                </Text>
+            </View>
+            <View style={[styles.textInline]}>
+                <Text style={[styles.neutral]}>
+                    Blue score:
+                </Text>
+                <Text style={[styles.blue]}>
+                    {props.blueScore}
+                </Text>
+            </View>
         </View>
     )
 }
@@ -30,8 +34,12 @@ export default Scoreboard;
 
 const styles = StyleSheet.create({
     scoreboard: {
-        flex: 1,
-        flexDirection: "row"
+        marginTop: 10,
+        marginBottom: 20
+    },
+    textInline: {
+        flexDirection: "row",
+        alignItems: "center"
     },
     red: {
         color: "#FF0000"

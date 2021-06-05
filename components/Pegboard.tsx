@@ -24,7 +24,7 @@ const Pegboard: FC<PegboardProps> = (props: PegboardProps) => {
             <View style={[styles.row]}>
                 {row1}
             </View>
-            <View style={[styles.row]}>
+            <View style={[styles.row, {paddingBottom: 20}]}>
                 {row2}
             </View>
             <View style={[styles.row]}>
@@ -41,12 +41,13 @@ export default Pegboard;
 
 const styles = StyleSheet.create({
     board: {
-        borderWidth:  1
+        borderWidth:  1,
+        padding: 10
     },
     row: {
-        flex: 1,
-        flexDirection: "row",
-        alignItems: 'center',
-        justifyContent: 'center',
+        paddingLeft: 6,
+        paddingTop: 6,
+        paddingBottom: 6,
+        flexDirection: "row"
     }
 });
