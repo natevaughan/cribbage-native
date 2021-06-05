@@ -10,8 +10,8 @@ import * as React from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
+import PlayScreen from '../screens/PlayScreen';
+import AboutScreen from '../screens/AboutScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -21,20 +21,20 @@ export default function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Play"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneNavigator}
+        name="Play"
+        component={PlayNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="cube" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoNavigator}
+        name="About"
+        component={AboutNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="help-circle-outline" color={color} />,
         }}
       />
     </BottomTab.Navigator>
@@ -49,30 +49,30 @@ function TabBarIcon(props: { name: React.ComponentProps<typeof Ionicons>['name']
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabOneParamList>();
+const PlayStack = createStackNavigator<TabOneParamList>();
 
-function TabOneNavigator() {
+function PlayNavigator() {
   return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
-        name="TabOneScreen"
-        component={TabOneScreen}
-        options={{ headerTitle: 'Tab One Title' }}
+    <PlayStack.Navigator>
+      <PlayStack.Screen
+        name="PlayScreen"
+        component={PlayScreen}
+        options={{ headerTitle: 'Cribbage' }}
       />
-    </TabOneStack.Navigator>
+    </PlayStack.Navigator>
   );
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
+const AboutStack = createStackNavigator<TabTwoParamList>();
 
-function TabTwoNavigator() {
+function AboutNavigator() {
   return (
-    <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={TabTwoScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
+    <AboutStack.Navigator>
+      <AboutStack.Screen
+        name="AboutScreen"
+        component={AboutScreen}
+        options={{ headerTitle: 'AboutScreen' }}
       />
-    </TabTwoStack.Navigator>
+    </AboutStack.Navigator>
   );
 }
