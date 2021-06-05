@@ -2,43 +2,52 @@ import React from "react";
 import Pegboard from "./Pegboard";
 import ScoreIncrementGrid from "./ScoreIncrementGrid";
 import Scoreboard from "./Scoreboard";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+
+class GameState {
+    constructor(history: Scores[]) {
+        this.history = history
+    }
+
+    history: Scores[];
+}
+
+class Scores {
+    red: number = 0
+    blue: number = 0
+}
 
 export default class Game extends React.Component {
 
-    zeros() {
-        return { red: 0, blue: 0 };
-    }
-
-    constructor(props) {
+    constructor(props: any) {
         super(props);
-        this.state = {
-                history: [this.zeros()]
-        };
+        this.state = new GameState([new Scores()])
     }
 
-    increment(team, points) {
+    state: GameState
+
+    increment(team: string, points: number) {
         let history = this.state.history.slice();
         let last = history[history.length - 1] || {};
         if (this.winner(last)) {
             return
         }
-        let newItem = {}
-        newItem[team] = last[team] + points;
-        let otherTeam = this.otherTeam(team);
-        newItem[otherTeam] = last[otherTeam] || 0;
+        let newItem = new Scores();
+        switch (team) {
+            case "red":
+                newItem.red = last.red + points;
+                newItem.blue = last.blue || 0;
+                break;
+            case "blue":
+                newItem.blue = last.blue + points;
+                newItem.red = last.red || 0;
+                break;
+        }
         history.push(newItem)
         this.setState({history: history})
     }
 
-    otherTeam(team) {
-        if (team === "red") {
-            return "blue"
-        } else {
-            return "red"
-        }
-    }
-
-    winner(last) {
+    winner(last: Scores) {
         if (last.red >= 121) {
             return "red";
         } else if (last.blue >= 121) {
@@ -49,8 +58,8 @@ export default class Game extends React.Component {
     }
 
     render() {
-        let last = this.state.history[this.state.history.length - 1] || this.zeros();
-        let previousTotals = this.zeros();
+        let last = this.state.history[this.state.history.length - 1] || new Scores();
+        let previousTotals = new Scores();
         let i = this.state.history.length - 1
         while (i >= 0 && (previousTotals.red === 0 || previousTotals.blue === 0)) {
             if (this.state.history[i].red !== last.red && previousTotals.red === 0) {
@@ -62,24 +71,39 @@ export default class Game extends React.Component {
             i--;
         }
         let message = "Cribbage";
-        let messageClassName = "text-2xl text-center mb-4";
+        let titleStyles = Object.assign({}, styles.title);
         let winner = this.winner(last)
         if (winner) {
             message = `${winner} wins!`
-            messageClassName = `text-2xl text-center mb-4 text-${winner}`;
+            titleStyles.color = '#FF0000';
         }
         return (
-            <div className="container">
-                <div className="flex flex-col items-center justify-center">
-                    <div className={messageClassName}>{message}</div>
-                    <Scoreboard redScore={last.red} blueScore={last.blue} />
-                    <Pegboard redScore={last.red} blueScore={last.blue} previousRedScore={previousTotals.red} previousBlueScore={previousTotals.blue} />
-                    <ScoreIncrementGrid
-                        incrementRed={(i) => {this.increment("red", i)}}
-                        incrementBlue={(i) => {this.increment("blue", i)}}
-                    />
-                </div>
-            </div>
+            <ScrollView contentContainerStyle={[styles.container]}>
+                <Text style={[titleStyles]}>{message}</Text>
+                <Scoreboard redScore={last.red} blueScore={last.blue} />
+                <ScoreIncrementGrid
+                    incrementRed={(i) => {this.increment("red", i.valueOf())}}
+                    incrementBlue={(i) => {this.increment("blue", i.valueOf())}}
+                />
+            </ScrollView>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#666666'
+    },
+    separator: {
+        marginVertical: 30,
+        height: 1,
+        width: '80%',
+    },
+});
